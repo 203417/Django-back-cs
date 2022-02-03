@@ -46,7 +46,11 @@ INSTALLED_APPS = [
     #Librerias agregadas al proyecto
     'rest_framework',
     'rest_framework.authtoken',
+    # 'res_auth',
+    # 'rest_auth.registration',
 ]
+
+SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':('rest_framework.permissions.IsAuthenticated',),
