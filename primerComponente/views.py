@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import json
 
 # Importacion de modelos agregados
 from primerComponente.models import PrimerTabla
@@ -11,18 +12,34 @@ from primerComponente.serializers import PrimerTablaSerializer
 
 # Create your views here.
 class PrimerTablaList(APIView):
+    def responseCustom(self, msg, response, status):
+        datas = {
+            'msg': msg,
+            'pay_load': response,
+            'status': status
+        }
+        res = json.dumps(datas)
+        responseSuccess = json.loads(res)
+        return responseSuccess
+
     def get(self, request, format = None):
         queryset = PrimerTabla.objects.all()
         serializer = PrimerTablaSerializer(queryset, many = True, context = {'request': request})
-        return Response(serializer.data)
+        res = self.responseCustom("Successful", serializer.data, status = status.HTTP_200_OK)
+        # return Response(serializer.data)
+        return Response(res)
 
     def post(self, request, format = None):
         serializer = PrimerTablaSerializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
             datas = serializer.data
-            return Response(datas, status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            res = self.responseCustom("Successful", serializer.data, status = status.HTTP_200_OK)
+            # return Response(datas, status = status.HTTP_201_CREATED)
+            return Response(res)
+        res = self.responseCustom("Error", serializer.data, status = status.HTTP_400_BAD_REQUEST)
+        # return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        return Response(res)
 
 class PrimerTablaDetail(APIView):
     def get_object(self, pk):
