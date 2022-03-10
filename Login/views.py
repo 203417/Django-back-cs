@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from django.http import response
 
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 # rest-framework recursos
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 
 # Create your views here.
 class LoginAuth(ObtainAuthToken):
@@ -18,4 +22,8 @@ class LoginAuth(ObtainAuthToken):
             'token':token.key,
             'user_id':user.pk,
             'email':user.email
-        }) 
+        })
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
