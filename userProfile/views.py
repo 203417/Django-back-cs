@@ -38,7 +38,7 @@ class ProfileTable(APIView):
                 return Response(serializer_response.data, status=status.HTTP_201_CREATED)
             return Response("Metodo post no permitido", status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response("User doesn't")
+            return Response("Not User")
     
 class ProfileTableDetail(APIView):
     def get_object(self, pk):
@@ -78,15 +78,15 @@ class ProfileTableDetail(APIView):
                 print("La imagen no existe")
             idResponse.url_img = archivos
             idResponse.save()
-            return Response("Todo kul",status.HTTP_201_CREATED)
+            return Response("Successfull",status.HTTP_201_CREATED)
         else:
-            return Response("No salio bien")
+            return Response("Oh no, that's bad")
     
     def delete(self, request, pk):
         UserProfileModel = self.get_object(pk)
         if UserProfileModel != 404:
-            profile.url_img.delete(save=True)
-            # profile.delete(save=True)
+            UserProfileModel.url_img.delete(save=True)
+            # UserProfileModel.delete(save=True)
             return Response("Imagen eliminada",status=status.HTTP_204_NO_CONTENT)
         return Response("Imagen no encontrada",status = status.HTTP_400_BAD_REQUEST)
     
@@ -107,7 +107,7 @@ class UserProfile(APIView):
         if(idResponse != 404):
             responseData = self.res_custom(idResponse, status.HTTP_200_OK)
             return Response(responseData)
-        return("No se encontró el usuario")
+        return("user not found")
     
     def put(self, request, pk, format=None):
         data = request.data
